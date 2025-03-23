@@ -1,0 +1,37 @@
+@using Microsoft.AspNetCore.Identity
+
+@model List<Post>
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    var aspAction = User.IsInRole("Admin") ? "Delete" : "DeletePost";
+}
+
+
+@if (Model != null && Model.Any())
+{
+    <ul class="list-group">
+        @foreach (var post in Model)
+        {
+            <li class="post-profile">
+                <div>
+                    <p>@post.Content</p>
+                    <small class="text-muted">Posted on @post.CreatedAt.ToString("yyyy-MM-dd HH:mm")</small>
+                </div>
+
+                @* Visa Delete knapp för admin/inloggad användare *@
+                @if (User?.Identity?.IsAuthenticated == true && UserManager.GetUserId(User) == post.UserId || User?.IsInRole("Admin") == true)
+                {
+                    <form asp-controller="Post" asp-action="@aspAction" method="post" onsubmit="return confirm('Är du säker?');" style="display:inline;">
+                        <input type="hidden" name="id" value="@post.Id" />
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                }
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Inga inlägg</p>
+}

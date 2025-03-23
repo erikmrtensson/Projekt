@@ -1,0 +1,60 @@
+@using Microsoft.AspNetCore.Identity
+@model IEnumerable<Post>
+
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Klotterväggen";
+    var aspAction = User.IsInRole("Admin") ? "Delete" : "DeletePost";
+}
+
+<h2 class="page-title">Klottervägg</h2>
+
+@if(TempData["ErrorMessage"] != null)
+{
+    <div class="error-message">
+        <p>@TempData["ErrorMessage"]</p>   
+    </div>
+} else if(TempData["Post"] != null) 
+{
+    <div class="success-message">
+        <p>@TempData["Post"]</p>   
+    </div>
+}
+
+@if (User?.Identity?.IsAuthenticated == true)
+{
+    <form asp-action="Create" method="post" class="post-form">
+        <textarea name="content" class="textarea-custom" placeholder="Skriv ett inlägg..." required></textarea>
+        <br>
+        <button type="submit" class="btn btn-primary">Skicka</button>
+    </form>
+}
+else
+{
+    <p class="login-message">Logga in för att skriva inlägg.</p>
+}
+
+@foreach (var post in Model)
+{
+    <div class="post-card">
+        <div class="post-header">
+            <img src="~/images/@(post.User?.ImageName ?? "default.jpg")" alt="Profile Picture" class="profile-pic">
+            <h5>
+                <a asp-controller="Profile" asp-action="Details" asp-route-id="@post.UserId" class="user-name">
+                    @post.User?.Name
+                </a>
+            </h5>
+        </div>
+        <p class="post-content">@post.Content</p>
+        <small class="post-time">@post.CreatedAt.ToString("yyyy-MM-dd HH:mm")</small>
+
+        @if ((User?.Identity?.IsAuthenticated ?? false) && (User.IsInRole("Admin") || UserManager.GetUserId(User) == post.UserId))
+        {
+            <form asp-controller="Post" asp-action="@aspAction" asp-route-id="@post.Id" method="post"
+                onsubmit="return confirm('Är du säker?');">
+                <button type="submit" class="btn btn-danger">Radera</button>
+            </form>
+        }
+    </div>
+}

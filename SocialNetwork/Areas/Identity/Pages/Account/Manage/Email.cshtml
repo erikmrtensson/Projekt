@@ -1,0 +1,45 @@
+﻿@page
+@model EmailModel
+@{
+    ViewData["Title"] = "Hantera e-post";
+    ViewData["ActivePage"] = ManageNavPages.Email;
+}
+
+<h3>@ViewData["Title"]</h3>
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="row">
+    <div class="col-md-6">
+        <form id="email-form" method="post">
+            <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+            @if (Model.IsEmailConfirmed)
+            {
+                <div class="form-floating mb-3">
+                    <label asp-for="Email" class="input-group label"></label>
+                    <input asp-for="Email" class="input-custom" placeholder="Fyll i e-post" disabled />
+                        <div class="input-group-append">
+                            <span class="h-100 input-group-text text-success font-weight-bold">✓</span>
+                        </div>
+                </div>
+            }
+            else
+            {
+                <div class="form-floating mb-3">
+                    <label asp-for="Email" class="input-group label"></label>
+                    <input asp-for="Email" class="input-custom" placeholder="Fyll i e-post" disabled />
+                    <br>
+                    <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Skicka e-post bekräftelse</button>
+                </div>
+            }
+            <div class="form-floating mb-3">
+                <label asp-for="Input.NewEmail" class="input-group label"></label>
+                <input asp-for="Input.NewEmail" class="input-custom" autocomplete="email" aria-required="true" placeholder="Fyll i ny e-post." />
+                <span asp-validation-for="Input.NewEmail" class="text-danger"></span>
+            </div>
+            <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="w-100 btn btn-lg btn-primary">Ändra e-post</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

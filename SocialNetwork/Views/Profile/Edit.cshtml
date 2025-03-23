@@ -1,0 +1,46 @@
+@model ApplicationUser
+@{
+    ViewData["Title"] = "Redigera profil";
+}
+
+<h2>Redigera Profil</h2>
+
+<form asp-controller="Profile" asp-action="Edit" method="post" enctype="multipart/form-data" class="edit-form">
+    <div class="form-group">
+        <label asp-for="Name">Namn:</label>
+        <br>
+        <input asp-for="Name" class="input-custom"/>
+    </div>
+<br>
+    <div class="form-group">
+        <label asp-for="Bio">Bio:</label>
+        <br>
+        <textarea asp-for="Bio" class="textarea-custom"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Profilbild</label>
+        <br />
+        <img src="~/images/@Model.ImageName" alt="Profile Picture" class="profile-image-small" />
+        <br />
+        <input type="file" asp-for="ImageFile" class="input-file" />
+    </div>
+
+    <div class="input-group">
+    <label for="song">Välj en låt</label>
+    <select asp-for="SelectedSong" id="song" class="form-input">
+        <option value="None">Ingen låt</option>
+        <option value="song1.mp3">Svängig</option>
+        <option value="song2.mp3">Melankolisk</option>
+        <option value="song3.mp3">Märklig</option>
+    </select>
+</div>
+
+    <button type="submit" class="btn btn-custom">Spara</button>
+</form>
+
+<form asp-controller="Profile" asp-action="ResetProfilePicture" method="post">
+    <button type="submit" class="btn btn-danger">Använd default bild</button>
+</form>
+
+<a asp-controller="Profile" asp-action="Index" class="link-btn">Tillbaka till profil</a>

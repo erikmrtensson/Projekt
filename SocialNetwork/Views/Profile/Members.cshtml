@@ -1,0 +1,19 @@
+@model List<MemberViewModel>
+
+@{
+    ViewData["Title"] = "Medlemmar";
+}
+
+<h2>Medlemmar</h2>
+
+<div class="member-list">
+    @foreach (var member in Model)
+    {
+        <div class="member-item">
+            <h3><a asp-controller="Profile" asp-action="Details" asp-route-id="@member.Id" class="link-btn-alt">@member.Name</a></h3>
+            <img src="~/images/@member.ImageName" alt="Profile Picture" class="profile-image-small">
+        </div>
+    }
+</div>
+
+<p><a asp-controller="Post" asp-action="Index" class="link-btn">Tillbaka</a></p>

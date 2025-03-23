@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<ul class="auth-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li>
+            <a class="auth-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hej @User.Identity?.Name!</a>
+        </li>
+        <li>
+            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Post", new { area = "" })">
+                <button type="submit" class="auth-button">Logga ut</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li>
+            <a class="auth-link" asp-area="Identity" asp-page="/Account/Register">Ny användare</a>
+        </li>
+        <li>
+            <a class="auth-link" asp-area="Identity" asp-page="/Account/Login">Logga in</a>
+        </li>
+    }
+</ul>

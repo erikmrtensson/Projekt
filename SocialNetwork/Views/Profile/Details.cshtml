@@ -1,0 +1,30 @@
+@using Microsoft.AspNetCore.Identity
+@model ProfileViewModel
+
+@{
+    ViewData["Title"] = "Detaljer";
+}
+
+
+<h2>@Model.Name</h2>
+<div class="profile-container">
+    <img src="~/images/@Model.ImageName" alt="Profile Picture" class="profile-image-small">
+    
+@if (!string.IsNullOrEmpty(Model.SelectedSong))
+{
+    <audio controls>
+        <source src="~/songs/@Model.SelectedSong" type="audio/mpeg">
+        Your browser does not support the audio tag.
+    </audio>
+}
+    
+    <div class="profile-bio">
+        <h3>Om @Model.Name</h3>
+        <p>@Model.Bio</p>
+    </div>
+
+    <h3>Inlägg av @Model.Name</h3>
+    @await Html.PartialAsync("_UserPosts", Model.Posts)
+
+    <p><a asp-controller="Post" asp-action="Index" class="link-btn">Tillbaka till Gästboken</a></p>
+</div>

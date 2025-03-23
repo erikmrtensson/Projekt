@@ -1,0 +1,41 @@
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+
+@model ProfileViewModel
+@{
+    ViewData["Title"] = "Min profil";
+}
+
+<h2>Min Profil</h2>
+
+@if(TempData["Profile"] != null) 
+{
+    <div class="success-message">
+        <p>@TempData["Profile"]</p>   
+    </div>
+}
+
+<div class="profile-container">
+    <img src="~/images/@Model.ImageName" alt="Profile Picture" class="profile-image" />
+    <div class="profile-name">
+        <h3>@Model.Name</h3>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.SelectedSong))
+    {
+        <audio controls>
+            <source src="~/songs/@Model.SelectedSong" type="audio/mpeg">
+            Your browser does not support the audio tag.
+        </audio>
+    }
+
+    <div class="profile-bio">
+        <h3>Om @Model.Name</h3>
+        <p>@Model.Bio</p>
+    </div>
+    <p><a asp-controller="Profile" asp-action="Edit" class="link-btn">Redigera Profil</a></p>
+
+    <h2>Dina inlägg</h2>
+
+    @await Html.PartialAsync("_UserPosts", Model.Posts)
+</div>
